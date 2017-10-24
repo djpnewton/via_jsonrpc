@@ -439,7 +439,7 @@ namespace via_jsonrpc {
             if (resp.Error != null) {
                 throw new ViaJsonException (resp.Error.Code, resp.Error.Message);
             }
-            return resp.Result;
+            return resp.Result; 
         }
 
         public TodayMarketStatus TodayMarketStatusQuery (string market) {
