@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Net;
-using System.Net.Http;
-using Newtonsoft.Json;
 using via_jsonrpc;
 
 namespace via_jsonrpc_test {
@@ -34,7 +31,7 @@ namespace via_jsonrpc_test {
             //var transactionOrder = via.OrderTransactionQuery(14,0,50);
             //Console.WriteLine(transactionOrder.records);
 
-            //var orderBook = via.OrderBookQuery("BTCCNY",1,0,50);
+            //var orderBook = via.OrderBookQuery("BTCCNY", 1, 0, 50);
 
             // Console.WriteLine(transactionOrder.records);
             //var status = via.TodayMarketStatus("BTCCNY");
