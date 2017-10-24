@@ -5,14 +5,14 @@ namespace via_jsonrpc_test {
     class Program {
         static void Main (string[] args) {
 
-            // var userId = 1;
-            // var asset = "BTC";
-            // var business = "deposit";
-            // int start_time = 0;
-            // int end_time = 0;
-            // int offset = 0;
-            // int limit = 50;
-            // string market = "";
+            var userId = 1;
+            var asset = "BTC";
+            var business = "deposit";
+            int start_time = 0;
+            int end_time = 0;
+            int offset = 0;
+            int limit = 50;
+            string market = "BTCCNY";
 
             var via = new ViaJsonRpc ("http://10.50.1.2:8080");
             // var balance = via.BalanceQuery(userId, asset);
@@ -26,12 +26,13 @@ namespace via_jsonrpc_test {
             //     Console.WriteLine(item.asset);
             // }
 
-            // var limitOrder = via.OrderLimitQuery(userId, "BTCCNY", 1, "1", "8000", "0.002", "0.001", "");
+            var limitOrder = via.OrderLimitQuery(userId, market, OrderSide.Ask, "1", "9200", "0.002", "0.001", "");
 
             //var transactionOrder = via.OrderTransactionQuery(14,0,50);
             //Console.WriteLine(transactionOrder.records);
 
-            //var orderBook = via.OrderBookQuery("BTCCNY", 1, 0, 50);
+            var orderBook = via.OrderBookQuery(market, OrderSide.Ask, 0, 50);
+            orderBook = via.OrderBookQuery(market, OrderSide.Bid, 0, 50);
 
             // Console.WriteLine(transactionOrder.records);
             //var status = via.TodayMarketStatus("BTCCNY");

@@ -12,6 +12,12 @@ namespace via_jsonrpc
         public ViaJsonException(string message) : base(message) { }
     }
 
+    public enum OrderSide
+    {
+        Ask = 1,
+        Bid = 2
+    }
+
     public class Error
     {
         public int Code;
@@ -54,7 +60,7 @@ namespace via_jsonrpc
     public class Order
     {
         public int id;
-        public int side;
+        public OrderSide side;
         public string price;
         public float mtime;
         public string deal_stock;
@@ -143,7 +149,7 @@ namespace via_jsonrpc
         public int id;
         public float time;
         public int user;
-        public int side;
+        public OrderSide side;
         public int role;
         public string amount;
         public string price;
@@ -320,7 +326,7 @@ namespace via_jsonrpc
             }
             return resp.Result;
         }
-        public Order OrderLimitQuery(int user_id, string market, int side, string amount, string price, string taker_fee_rate, string maker_fee_rate, string source)
+        public Order OrderLimitQuery(int user_id, string market, OrderSide side, string amount, string price, string taker_fee_rate, string maker_fee_rate, string source)
         {
             call_id++;
             var json = JsonBody(call_id, "order.put_limit", new object[] { user_id, market, side, amount, price, taker_fee_rate, maker_fee_rate, source });
@@ -334,7 +340,7 @@ namespace via_jsonrpc
             return resp.Result;
         }
 
-        public Order OrderMarketQuery(int user_id, string market, int side, string amount, string taker_fee_rate, string source)
+        public Order OrderMarketQuery(int user_id, string market, OrderSide side, string amount, string taker_fee_rate, string source)
         {
             call_id++;
             var json = JsonBody(call_id, "order.put_market", new object[] { user_id, market, side, amount, taker_fee_rate, source });
@@ -375,7 +381,7 @@ namespace via_jsonrpc
             return resp.Result;
         }
 
-        public OrderBook OrderBookQuery(string market, int side, int offset, int limit)
+        public OrderBook OrderBookQuery(string market, OrderSide side, int offset, int limit)
         {
             call_id++;
             var json = JsonBody(call_id, "order.book", new object[] { market, side, offset, limit });
@@ -431,7 +437,7 @@ namespace via_jsonrpc
             return resp.Result;
         }
 
-        public OrderCompleted OrderCompletedQuery(int user_id, string market, int start_time, int end_time, int offset, int limit, int side)
+        public OrderCompleted OrderCompletedQuery(int user_id, string market, int start_time, int end_time, int offset, int limit, OrderSide side)
         {
             call_id++;
             var json = JsonBody(call_id, "order.finished", new object[] { user_id, market, start_time, end_time, offset, limit, side });
