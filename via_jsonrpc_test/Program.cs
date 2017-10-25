@@ -15,8 +15,13 @@ namespace via_jsonrpc_test {
             string market = "BTCCNY";
 
             var via = new ViaJsonRpc ("http://10.50.1.2:8080");
-            // var balance = via.BalanceQuery(userId, asset);
-            // Console.WriteLine("Your balance is {0} ({1} frozen)", balance.Available, balance.Freeze);
+            var balance = via.BalanceQuery(userId, asset);
+            Console.WriteLine("Your {0} balance is {1} ({2} frozen)", asset, balance.Available, balance.Freeze);
+            var balances = via.BalanceQuery(userId);
+            foreach (var item in balances)
+            {
+                Console.WriteLine("Your {0} balance is {1} ({2} frozen)", item.Key, item.Value.Available, item.Value.Freeze);
+            }
             // // var status = via.BalanceUpdateQuery(userId, asset, "deposit", 15, "5.5");
             // // Console.WriteLine("Your balance update state is: {0}", status);
             // var balanceHistroy = via.BalanceHistoryQuery(userId, asset, business, start_time, end_time, offset, limit);

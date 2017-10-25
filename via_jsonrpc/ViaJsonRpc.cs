@@ -188,13 +188,11 @@ namespace via_jsonrpc
     public class BalanceHistoryResponse : BaseResponse
     {
         public BalanceHistory Result;
-
     }
 
     public class BalanceQueryResponse : BaseResponse
     {
         public Dictionary<string, Balance> Result;
-
     }
 
     public class BalanceUpdateResponse : BaseResponse
@@ -272,7 +270,7 @@ namespace via_jsonrpc
             client = new HttpClient(url);
         }
 
-        string JsonBody(int call_id, string method, object[] parameters)
+        string JsonBody(int call_id, string method, IEnumerable<object> parameters)
         {
             var dict = new Dictionary<string, object> { { "id", call_id },
                     { "jsonrpc", "2.0" },
@@ -282,10 +280,13 @@ namespace via_jsonrpc
             return JsonConvert.SerializeObject(dict);
         }
 
-        public Balance BalanceQuery(int user_id, string asset)
+        public Dictionary<string, Balance> BalanceQuery(int user_id, IEnumerable<string> assets)
         {
             call_id++;
-            var json = JsonBody(call_id, "balance.query", new object[] { user_id, asset });
+            var parameters = new List<object> { user_id };
+            foreach (var asset in assets)
+                parameters.Add(asset);
+            var json = JsonBody(call_id, "balance.query", parameters);
             json = client.PostJson(json);
             var resp = JsonConvert.DeserializeObject<BalanceQueryResponse>(json);
             resp.CheckId(call_id);
@@ -293,7 +294,17 @@ namespace via_jsonrpc
             {
                 throw new ViaJsonException(resp.Error.Code, resp.Error.Message);
             }
-            return resp.Result[asset];
+            return resp.Result;
+        }
+
+        public Balance BalanceQuery(int user_id, string asset)
+        {
+            return BalanceQuery(user_id, new string[]{ asset })[asset];
+        }
+
+        public Dictionary<string, Balance> BalanceQuery(int user_id)
+        {
+            return BalanceQuery(user_id, new string[]{});
         }
 
         public string BalanceUpdateQuery(int user_id, string asset, string business, int business_id, string change, Dictionary<string, object> source = null)
