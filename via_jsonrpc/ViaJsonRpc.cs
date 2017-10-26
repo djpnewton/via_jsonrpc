@@ -355,6 +355,7 @@ namespace via_jsonrpc
         {
             call_id++;
             var json = JsonBody(call_id, "order.put_market", new object[] { user_id, market, side, amount, taker_fee_rate, source });
+            json = client.PostJson(json);
             var resp = JsonConvert.DeserializeObject<ReturnOrderDetailResponse>(json);
             resp.CheckId(call_id);
             if (resp.Error != null)
