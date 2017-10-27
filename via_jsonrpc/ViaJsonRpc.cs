@@ -18,6 +18,12 @@ namespace via_jsonrpc
         Bid = 2
     }
 
+    public enum OrderType
+    {
+        Limit = 1,
+        Market = 2
+    }
+
     public class Error
     {
         public int Code;
@@ -69,7 +75,7 @@ namespace via_jsonrpc
         public string maker_fee;
         public float ctime;
         public string source;
-        public int type;
+        public OrderType type;
         public int user;
         public string taker_fee;
         public string deal_fee;
@@ -91,7 +97,7 @@ namespace via_jsonrpc
 
     }
 
-    public class PendingOrder
+    public class OrdersPending
     {
         public int limit;
         public int offset;
@@ -217,7 +223,7 @@ namespace via_jsonrpc
 
     public class OrderPendingResponse : BaseResponse
     {
-        public PendingOrder Result;
+        public OrdersPending Result;
     }
 
     public class ReturnOrderDetailResponse : BaseResponse
@@ -421,10 +427,10 @@ namespace via_jsonrpc
             return resp.Result;
         }
 
-        public PendingOrder OrderPendingQuery(string market, int limit, string interval)
+        public OrdersPending OrdersPendingQuery(int user_id, string market, int offset, int limit)
         {
             call_id++;
-            var json = JsonBody(call_id, "order.pending", new object[] { market, limit, interval });
+            var json = JsonBody(call_id, "order.pending", new object[] { user_id, market, offset, limit});
             json = client.PostJson(json);
             var resp = JsonConvert.DeserializeObject<OrderPendingResponse>(json);
             resp.CheckId(call_id);
