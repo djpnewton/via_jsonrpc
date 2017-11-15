@@ -253,7 +253,40 @@ namespace via_jsonrpc
 
     public class KlineResponse : BaseResponse
     {
-        public IEnumerable<IEnumerable<string>> Result;
+        public IList<IList<string>> Result;
+
+        public struct Kline
+        {
+            public long Time;
+            public string Open;
+            public string Close;
+            public string High;
+            public string Low;
+            public string Volume;
+            public string Amount;
+            public string Market;
+
+            public override string ToString()
+            {
+                return string.Format($"time: {Time}, open: {Open}, close: {Close}, high: {High}, low: {Low}, volume: {Volume}, amount: {Amount}, market: {Market}");
+            }
+        }
+
+        public static Kline ParseKlineList(IList<string> kline)
+        {
+            System.Diagnostics.Debug.Assert(kline.Count == 8);
+            return new Kline
+            {
+                Time = Convert.ToInt64(kline[0]),
+                Open = kline[1],
+                Close = kline[2],
+                High = kline[3],
+                Low = kline[4],
+                Volume = kline[5],
+                Amount = kline[6],
+                Market = kline[7]
+            };
+        }
     }
 
     public class MarketStatusResponse : BaseResponse
@@ -525,7 +558,7 @@ namespace via_jsonrpc
             return resp.Result;
         }
 
-        public IEnumerable<IEnumerable<string>> KlineQuery(string market, int start_time, int end_time, int interval)
+        public IList<IList<string>> KlineQuery(string market, long start_time, long end_time, long interval)
         {
             call_id++;
             var json = JsonBody(call_id, "market.kline", new object[] { market, start_time, end_time, interval });

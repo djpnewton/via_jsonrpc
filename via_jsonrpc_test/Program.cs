@@ -12,7 +12,7 @@ namespace via_jsonrpc_test {
             int end_time = 0;
             int offset = 0;
             int limit = 50;
-            string market = "BTCCNY";
+            string market = "BTCUSD";
 
             var via = new ViaJsonRpc ("http://10.50.1.2:8080");
             var balance = via.BalanceQuery(userId, asset);
@@ -50,16 +50,20 @@ namespace via_jsonrpc_test {
             }
 
             // Console.WriteLine(transactionOrder.records);
-            //var status = via.TodayMarketStatus("BTCCNY");
+            //var status = via.TodayMarketStatus(market);
             //Console.WriteLine("Todays Market Status is {0}", status);   
 
-            // var orderDepth = via.OrderDepthQuery("BTCCNY",50,"1");
-            // var transactionhistory = via.MarketHistoryQuery("BTCCNY",50,0);
+            // var orderDepth = via.OrderDepthQuery(market, 50, "1");
+            // var transactionhistory = via.MarketHistoryQuery(market, 50, 0);
             // foreach(var item in transactionhistory)
             // {
             // Console.Write(item.id);
             // }
 
+            Console.WriteLine("Klines...");
+            var klines = via.KlineQuery(market, 1, 12000000000, 3600);
+            foreach (var kline in klines)
+                Console.WriteLine(KlineResponse.ParseKlineList(kline));
         }
     }
 }
