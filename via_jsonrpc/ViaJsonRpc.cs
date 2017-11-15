@@ -83,7 +83,7 @@ namespace via_jsonrpc
         public string deal_money;
     }
 
-    public class OrderCompleted
+    public class OrdersCompleted
     {
         public int offset;
         public int limit;
@@ -231,9 +231,9 @@ namespace via_jsonrpc
         public Order Result;
     }
 
-    public class OrderCompletedResponse : BaseResponse
+    public class OrdersCompletedResponse : BaseResponse
     {
-        public OrderCompleted Result;
+        public OrdersCompleted Result;
     }
 
     public class MarketPriceResponse : BaseResponse
@@ -488,12 +488,12 @@ namespace via_jsonrpc
             return resp.Result;
         }
 
-        public OrderCompleted OrderCompletedQuery(int user_id, string market, int start_time, int end_time, int offset, int limit, OrderSide side)
+        public OrdersCompleted OrdersCompletedQuery(int user_id, string market, long start_time, long end_time, int offset, int limit, OrderSide side)
         {
             call_id++;
             var json = JsonBody(call_id, "order.finished", new object[] { user_id, market, start_time, end_time, offset, limit, side });
             json = client.PostJson(json);
-            var resp = JsonConvert.DeserializeObject<OrderCompletedResponse>(json);
+            var resp = JsonConvert.DeserializeObject<OrdersCompletedResponse>(json);
             resp.CheckId(call_id);
             if (resp.Error != null)
             {

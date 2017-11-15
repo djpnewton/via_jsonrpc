@@ -40,13 +40,29 @@ namespace via_jsonrpc_test {
             orderBook = via.OrderBookQuery(market, OrderSide.Bid, 0, 50);
 
             var ordersPending = via.OrdersPendingQuery(userId, market, 0, 10);
-            Console.WriteLine("{0}: You have {1} total pending orders", market, ordersPending.total);
+            Console.WriteLine("{0}: You have {1} pending orders", market, ordersPending.total);
             var assetA = market.Substring(0, 3);
             var assetB = market.Substring(3, 3);
             foreach (var item in ordersPending.records)
             {
                 var feeAsset = item.side == OrderSide.Ask ? assetB : assetA;
                 Console.WriteLine($"{item.side} - {item.type} - price: {item.price} {assetB}, amount: {item.amount} {assetA}, remaining: {item.left} {assetA}, traded: {item.deal_stock} {assetA} / {item.deal_money} {assetB}, fee: {item.deal_fee} {feeAsset}");
+            }
+
+            var ordersCompleted = via.OrdersCompletedQuery(userId, market, 1, 99999999999, 0, 10, OrderSide.Bid);
+            Console.WriteLine("{0}: completed bid orders", market);
+            foreach (var item in ordersCompleted.records)
+            {
+                var feeAsset = item.side == OrderSide.Ask ? assetB : assetA;
+                Console.WriteLine($"{item.side} - {item.type} - price: {item.price} {assetB}, amount: {item.amount} {assetA}, traded: {item.deal_stock} {assetA} / {item.deal_money} {assetB}, fee: {item.deal_fee} {feeAsset}");
+            }
+
+            ordersCompleted = via.OrdersCompletedQuery(userId, market, 1, 99999999999, 0, 10, OrderSide.Ask);
+            Console.WriteLine("{0}: completed ask orders", market);
+            foreach (var item in ordersCompleted.records)
+            {
+                var feeAsset = item.side == OrderSide.Ask ? assetB : assetA;
+                Console.WriteLine($"{item.side} - {item.type} - price: {item.price} {assetB}, amount: {item.amount} {assetA}, traded: {item.deal_stock} {assetA} / {item.deal_money} {assetB}, fee: {item.deal_fee} {feeAsset}");
             }
 
             // Console.WriteLine(transactionOrder.records);
@@ -60,10 +76,12 @@ namespace via_jsonrpc_test {
             // Console.Write(item.id);
             // }
 
+            /*
             Console.WriteLine("Klines...");
             var klines = via.KlineQuery(market, 1, 12000000000, 3600);
             foreach (var kline in klines)
                 Console.WriteLine(KlineResponse.ParseKlineList(kline));
+            */
         }
     }
 }
