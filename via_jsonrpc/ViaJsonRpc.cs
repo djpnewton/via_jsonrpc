@@ -60,7 +60,7 @@ namespace via_jsonrpc
     {
         public int offset;
         public int limit;
-        public IEnumerable<OrderTransactionRecords> records;
+        public IList<OrderTransactionRecords> records;
     }
 
     public class Order
@@ -87,13 +87,13 @@ namespace via_jsonrpc
     {
         public int offset;
         public int limit;
-        public IEnumerable<Order> records;
+        public IList<Order> records;
     }
 
     public class OrderBook
     {
         public int offset;
-        public IEnumerable<Order> orders;
+        public IList<Order> orders;
 
     }
 
@@ -102,7 +102,7 @@ namespace via_jsonrpc
         public int limit;
         public int offset;
         public int total;
-        public IEnumerable<Order> records;
+        public IList<Order> records;
     }
 
     public class BalanceHistoryRecords
@@ -119,13 +119,13 @@ namespace via_jsonrpc
     {
         public int offset;
         public int limit;
-        public IEnumerable<BalanceHistoryRecords> records;
+        public IList<BalanceHistoryRecords> records;
     }
 
     public class OrderDepth
     {
-        public IEnumerable<IEnumerable<string>> asks;
-        public IEnumerable<IEnumerable<string>> bids;
+        public IList<IList<string>> asks;
+        public IList<IList<string>> bids;
     }
 
     public class Balance
@@ -177,7 +177,7 @@ namespace via_jsonrpc
         public int offset;
         public int limit;
 
-        public IEnumerable<MarketTransactionRecord> records;
+        public IList<MarketTransactionRecord> records;
 
     }
     public class TodayMarketStatus
@@ -243,7 +243,7 @@ namespace via_jsonrpc
 
     public class MarketHistoryResponse : BaseResponse
     {
-        public IEnumerable<MarketHistory> Result;
+        public IList<MarketHistory> Result;
     }
 
     public class MarketTransactionHistoryResponse : BaseResponse
@@ -530,7 +530,7 @@ namespace via_jsonrpc
             return resp.Result;
         }
 
-        public IEnumerable<MarketHistory> MarketHistoryQuery(string market, int limit, int last_id)
+        public IList<MarketHistory> MarketHistoryQuery(string market, int limit, int last_id)
         {
             call_id++;
             var json = JsonBody(call_id, "market.deals", new object[] { market, limit, last_id });
