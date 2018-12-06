@@ -346,7 +346,7 @@ namespace via_jsonrpc
             return BalanceQuery(user_id, new string[]{});
         }
 
-        public string BalanceUpdateQuery(int user_id, string asset, string business, int business_id, string change, Dictionary<string, object> source = null)
+        public string BalanceUpdateQuery(int user_id, string asset, string business, long business_id, string change, Dictionary<string, object> source = null)
         {
             if (source == null)
                 source = new Dictionary<string, object>();
