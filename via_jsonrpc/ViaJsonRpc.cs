@@ -390,10 +390,10 @@ namespace via_jsonrpc
             return resp.Result;
         }
 
-        public Order OrderMarketQuery(int user_id, string market, OrderSide side, string amount, string taker_fee_rate, string source, bool bid_amount_money)
+        Order OrderMarketQuery(object[] args)
         {
             call_id++;
-            var json = JsonBody(call_id, "order.put_market", new object[] { user_id, market, side, amount, taker_fee_rate, source , bid_amount_money});
+            var json = JsonBody(call_id, "order.put_market", args);
             json = client.PostJson(json);
             var resp = JsonConvert.DeserializeObject<ReturnOrderDetailResponse>(json);
             resp.CheckId(call_id);
@@ -401,7 +401,17 @@ namespace via_jsonrpc
             {
                 throw new ViaJsonException(resp.Error.Code, resp.Error.Message);
             }
-            return resp.Result;
+            return resp.Result;   
+        }
+
+        public Order OrderMarketQuery(int user_id, string market, OrderSide side, string amount, string taker_fee_rate, string source)
+        {
+            return OrderMarketQuery(new object[] { user_id, market, side, amount, taker_fee_rate, source });
+        }
+
+        public Order OrderMarketQuery(int user_id, string market, OrderSide side, string amount, string taker_fee_rate, string source, bool bid_amount_money)
+        {
+            return OrderMarketQuery(new object[] { user_id, market, side, amount, taker_fee_rate, source, bid_amount_money });
         }
 
         public Order OrderCancelQuery(int user_id, string market, int order_id)
