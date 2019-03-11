@@ -4,10 +4,48 @@ using Newtonsoft.Json;
 
 namespace via_jsonrpc
 {
+    public enum ViaError
+    {
+        UNINITIALIZED = 0,
+
+        INVALID_ARGUMENT = 1,
+        INTERNAL_ERROR = 2,
+        SERVICE_UNAVAILABLE = 3,
+
+        // balance update
+        BALANCE_UPDATE__REPEAT_UPDATE = 10,
+        BALANCE_UPDATE__BALANCE_NOT_ENOUGH = 11,
+
+        // put limit
+        PUT_LIMIT__BALANCE_NOT_ENOUGH = 10,
+        PUT_LIMIT__AMOUNT_TOO_SMALL = 11,
+
+        // put market
+        PUT_MARKET__BALANCE_NOT_ENOUGH = 10,
+        PUT_MARKET__AMOUNT_TOO_SMALL = 11,
+        PUT_MARKET__NO_ENOUGH_TRADER = 12,
+
+        // order query
+        ORDER_QUERY__ORDER_NOT_FOUND = 10,
+        ORDER_QUERY__USER_NOT_MATCH = 11,
+
+        // ours
+        RESPONSE_ID_NO_MATCH = 1000,
+    }
 
     public class ViaJsonException : Exception
     {
-        public ViaJsonException(int code, string message) : base(string.Format("{0}: {1}", code, message)) { }
+        public ViaError Err = ViaError.UNINITIALIZED;
+
+        public ViaJsonException(int code, string message) : base(string.Format("{0}: {1}", code, message))
+        {
+            try
+            {
+                Err = (ViaError)code;
+            }
+            catch
+            {}
+        }
 
         public ViaJsonException(string message) : base(message) { }
     }
