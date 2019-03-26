@@ -82,6 +82,29 @@ namespace via_jsonrpc
         }
     }
 
+    public class MarketInfo
+    {
+        public string name;
+        public int fee_prec;
+        public string stock;
+        public string money;
+        public int stock_prec;
+        public int money_prec;
+        public string min_amount;
+    }
+
+    public class MarketStatus
+    {
+        public int period;
+        public string deal;
+        public string high;
+        public string last;
+        public string volume;
+        public string open;
+        public string close;
+        public string low;
+    }
+
     public class OrderTransactionRecords
     {
         public float time;
@@ -200,16 +223,7 @@ namespace via_jsonrpc
         public string deal;
 
     }
-    public class MarketStatus
-    {
-        public string close;
-        public int period;
-        public string last;
-        public string high;
-        public string open;
-        public string volume;
-        public string low;
-    }
+
     public class MarketTransaction
     {
         public int offset;
@@ -228,7 +242,11 @@ namespace via_jsonrpc
         public string deal;
     }
 
-    // Balace
+    public class MarketListResponse : BaseResponse
+    {
+        public List<MarketInfo> Result;
+    }
+
     public class BalanceHistoryResponse : BaseResponse
     {
         public BalanceHistory Result;
@@ -355,6 +373,21 @@ namespace via_jsonrpc
                     { "params", parameters }
                 };
             return JsonConvert.SerializeObject(dict);
+        }
+
+        public List<MarketInfo> MarketListQuery()
+        {
+            call_id++;
+            var parameters = new List<object>();
+            var json = JsonBody(call_id, "market.list", parameters);
+            json = client.PostJson(json);
+            var resp = JsonConvert.DeserializeObject<MarketListResponse>(json);
+            resp.CheckId(call_id);
+            if (resp.Error != null)
+            {
+                throw new ViaJsonException(resp.Error.Code, resp.Error.Message);
+            }
+            return resp.Result;          
         }
 
         public Dictionary<string, Balance> BalanceQuery(int user_id, IEnumerable<string> assets)
