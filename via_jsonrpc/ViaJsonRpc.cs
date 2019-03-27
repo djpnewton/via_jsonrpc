@@ -52,6 +52,7 @@ namespace via_jsonrpc
 
     public enum OrderSide
     {
+        Any = 0,
         Ask = 1,
         Bid = 2
     }
