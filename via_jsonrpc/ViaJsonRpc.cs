@@ -222,7 +222,8 @@ namespace via_jsonrpc
         public string amount;
         public string price;
         public string deal;
-
+        public string fee;
+        public int deal_order_id;
     }
 
     public class MarketTransaction
