@@ -31,6 +31,7 @@ namespace via_jsonrpc
 
         // ours
         RESPONSE_ID_NO_MATCH = 1000,
+        WEB_EXCEPTION = 1001,
     }
 
     public class ViaJsonException : Exception
