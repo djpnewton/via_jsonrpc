@@ -232,41 +232,6 @@ namespace via_jsonrpc.sql
         public static readonly string SELECT_USER_DEALS_ALL = $"select * from ({SELECT_USER_DEALS_UNION}) as U";
         public static readonly string SELECT_USER_DEALS_COUNT = $"select count(*) from ({SELECT_USER_DEALS_UNION}) as U";
 
-        //TODO: get rid of this!!! it is not needed
-        public static bool EnsureExchangeUserTablesPresent(ILogger logger, string host, string database, string user, string password, int user_id)
-        {
-            var conn = new MySqlConnection($"host={host};database={database};uid={user};password={password};");
-            try
-            {
-                var sqlCmds = new string[] {
-                    $"create table if not exists balance_history_{user_id} like balance_history_example;",
-                    $"create table if not exists deal_history_{user_id} like deal_history_example;",
-                    $"create table if not exists order_history_{user_id} like order_history_example;",
-                    $"create table if not exists order_detail_{user_id} like order_detail_example;",
-                    $"create table if not exists user_deal_history_{user_id} like user_deal_history_example;"};
-                conn.Open();
-                var trans = conn.BeginTransaction();
-                foreach (var sqlCmd in sqlCmds)
-                {
-#pragma warning disable CA2100 // Review SQL queries for security vulnerabilities
-                    var cmd = new MySqlCommand(sqlCmd, conn, trans);
-#pragma warning restore CA2100 // Review SQL queries for security vulnerabilities
-                    cmd.ExecuteNonQuery();
-                }
-                trans.Commit();
-                return true;
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message);
-            }
-            finally
-            {
-                conn.Close();
-            }
-            return false;
-        }
-
         public static IList<Deal> ExchangeDeals(ILogger logger, string host, string database, string user, string password, long startUnixtimestamp = 0, long endUnixtimestamp = 0, long offset = 0, long limit = 0)
         {
             var orderBy = "order by U.time desc";
