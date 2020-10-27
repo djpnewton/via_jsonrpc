@@ -193,8 +193,8 @@ namespace via_jsonrpc
 
     public class Balance
     {
-        public string Freeze;
-        public string Available;
+        public string Freeze { get; set; }
+        public string Available { get; set; }
     }
     public class MarketHistory
     {
